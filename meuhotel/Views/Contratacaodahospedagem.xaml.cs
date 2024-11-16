@@ -1,3 +1,5 @@
+using meuhotel.Models;
+
 namespace meuhotel.Views;
 
 public partial class Contratacaodahospedagem : ContentPage
@@ -18,11 +20,26 @@ public partial class Contratacaodahospedagem : ContentPage
         dtpck_checkout.MaximumDate = dtpck_checkin.Date.AddMonths(6);
     }
 
-	private void Button_Clicked(object sender, EventArgs e)
+	private async void Button_Clicked(object sender, EventArgs e)
 	{
 		try
 		{
-			Navigation.PushAsync(new Hospedagemcontratada());
+			Hospedagem h = new Hospedagem
+			{
+				QuartoSelecionado = (Quarto)pck_quarto.SelectedItem,
+				QntAdultos = Convert.ToInt32(stp_adultos.Value),
+				QtnCriancas = Convert.ToInt32(stp_criancas.Value),
+				DataCheckIn = dtpck_checkin.Date,
+				DataCheckOut = dtpck_checkout.Date,
+			};
+
+
+
+			await Navigation.PushAsync(new Hospedagemcontratada()
+			{
+				BindingContext = h
+			});
+
 		}catch (Exception ex)
 		{
 			DisplayAlert("Ops", ex.Message, "OK");
